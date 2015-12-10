@@ -1,6 +1,6 @@
 package services;
 
-import models.Registration;
+import core.models.Registration;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;

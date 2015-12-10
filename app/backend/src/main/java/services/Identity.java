@@ -1,7 +1,5 @@
 package services;
 
-import models.User;
-
 import javax.ejb.Stateful;
 
 @Stateful
