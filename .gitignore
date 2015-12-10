@@ -1,0 +1,10 @@
+.idea
+target
+app/frontend/vendor
+app/frontend/node_modules
+
+app/frontend/bower_components
+
+app/frontend/.idea
+
+app/frontend/dist

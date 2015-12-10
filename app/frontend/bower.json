@@ -1,0 +1,19 @@
+{
+  "name": "webpack-simple",
+  "version": "0.0.0",
+  "homepage": "https://github.com/dsvgit/webpack-simple",
+  "authors": [
+    "dsvgit <dsv.mail@yandex.ru>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "jquery": "~2.1.4"
+  }
+}
