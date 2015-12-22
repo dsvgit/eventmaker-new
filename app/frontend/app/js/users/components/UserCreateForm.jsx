@@ -14,7 +14,9 @@ class UsersCreateForm extends React.Component {
 
     this.state = {
       firstName: '',
-      login: ''
+      login: '',
+      password: '',
+      email: ''
     };
   }
 
@@ -29,7 +31,9 @@ class UsersCreateForm extends React.Component {
 
     var user = {
       firstName: this.state.firstName,
-      login: this.state.login
+      login: this.state.login,
+      password: this.state.password,
+      email: this.state.email
     };
     console.log('user create form create', user);
     this.props.dispatch(addUser(user));
@@ -49,6 +53,8 @@ class UsersCreateForm extends React.Component {
 
           <TextField floatingLabelText="First Name" onChange={this.handleChange.bind(this, 'firstName')}/>
           <TextField floatingLabelText="Login" onChange={this.handleChange.bind(this, 'login')}/>
+          <TextField type="password" floatingLabelText="Password" onChange={this.handleChange.bind(this, 'password')}/>
+          <TextField type="email" floatingLabelText="E-mail" onChange={this.handleChange.bind(this, 'email')}/>
           <div>
             <RaisedButton style={{'margin-right': '10px'}} label="Create" onClick={this.handleCreate.bind(this)} secondary={true} />
             <RaisedButton label="Cancel" onClick={this.handleCancel.bind(this)} secondary={true} />

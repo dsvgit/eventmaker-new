@@ -63,15 +63,16 @@ class UsersTable extends React.Component {
     return (
       <div>
         <Actions onDelete={this.handleDelete.bind(this)}/>
-        <Table className="table" style={{width: '500px'}}>
+        <Table className="table">
           <TableHeader>
           <TableRow>
             <TableHeaderColumn style={{textAlign: 'center'}}></TableHeaderColumn>
             <TableHeaderColumn>Name</TableHeaderColumn>
             <TableHeaderColumn>Login</TableHeaderColumn>
+            <TableHeaderColumn>E-mail</TableHeaderColumn>
           </TableRow>
           </TableHeader>
-          <TableBody>
+          <TableBody showRowHover={true}>
             {users}
           </TableBody>
         </Table>

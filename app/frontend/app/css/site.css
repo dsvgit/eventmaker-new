@@ -13,6 +13,7 @@ html, body {
 
 a {
   text-decoration: none;
+  color: black;
 }
 
 a:visited {
@@ -83,7 +84,7 @@ input.users-table-input-checkbox {
 }
 
 .common-tabs-main {
-  padding: 10px 10px 10px 10px;
+  padding: 25px 10px 25px 10px;
 }
 
 .common-tabs-main .common-tab-main {
@@ -162,4 +163,53 @@ input.users-table-input-checkbox {
   top: 50%;
   left: 50%;
   text-align: center;
+}
+
+.common-tab-right {
+  float: right;
+}
+
+.common-tab-right.last {
+  margin-right: 0px;
+}
+
+.common-tabs-avatar-main {
+
+}
+
+.common-tabs-avatar-main {
+  position: relative;
+  top: -11px;
+}
+
+.common-tabs-login {
+  position: relative;
+  top: -4px;
+  right: 10px;
+  font-weight: bold;
+}
+
+.event-card-edit-main {
+  display: flex;
+}
+
+.event-card-edit-content {
+  flex: 20;
+}
+
+.event-card-edit-form {
+  flex: 10;
+}
+
+.event-card-main {
+  display: flex;
+}
+
+.event-card-content {
+  flex: 20;
+  margin-right: 10px;
+}
+
+.event-card-regs {
+  flex: 10;
 }

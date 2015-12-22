@@ -5,11 +5,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 @Stateless
-public class AdminService {
+public class AdminService implements AdminServiceRemote {
     @PersistenceContext
     private EntityManager em;
-
-    public void initDatabase() {
-
-    }
 }

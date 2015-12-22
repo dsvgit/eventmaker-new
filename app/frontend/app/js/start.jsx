@@ -10,10 +10,18 @@ import { store } from './store.jsx';
 import { Home } from './home.jsx';
 import UsersCreateForm from './users/components/UserCreateForm.jsx';
 import UsersModule from './users/components/UsersModule.jsx';
+import UserProfile from './users/components/UserProfile.jsx';
+import UserPage from './users/components/UserPage.jsx';
 import EventsModule from './events/components/EventsModule.jsx';
 import EventCard from './events/components/EventCard.jsx';
-import { Tabs } from 'app/js/route/components/Tabs.jsx';
+import EventCardEdit from './events/components/EventCardEdit.jsx';
+import Tabs from 'app/js/route/components/Tabs.jsx';
 import Login from './login/components/Login.jsx';
+import initConfig from './config.jsx';
+
+import { api } from 'app/js/utils/url.jsx';
+
+initConfig();
 
 var history = createHistory();
 
@@ -39,8 +47,11 @@ ReactDOM.render(
         <IndexRoute component={Home}/>
         <Route path="/users" component={UsersModule}/>
         <Route path="/users/create" component={UsersCreateForm} />
+        <Route path="/profile" component={UserProfile}/>
+        <Route path="/user/:userID" component={UserPage}/>
         <Route path="/events" component={EventsModule}/>
         <Route path="/event/:eventID" component={EventCard}/>
+        <Route path="/event/edit/:eventID" component={EventCardEdit}/>
       </Route>
       <Route path="/login" component={Login}/>
     </Router>

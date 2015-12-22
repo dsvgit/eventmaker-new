@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router';
 import Checkbox from 'material-ui/lib/checkbox';
 import TableRow from 'material-ui/lib/table/table-row';
 import TableRowColumn from 'material-ui/lib/table/table-row-column';
@@ -17,6 +18,7 @@ export class UserRow extends React.Component {
   }
 
   render() {
+    var user = this.props.user;
     return (
       <TableRow>
         <TableRowColumn>
@@ -24,8 +26,11 @@ export class UserRow extends React.Component {
             className="users-table-input-checkbox"
             onClick={this.handleMark.bind(this)} />
         </TableRowColumn>
-        <TableRowColumn>{ this.props.user.firstName }</TableRowColumn>
-        <TableRowColumn>{ this.props.user.login }</TableRowColumn>
+        <TableRowColumn>
+          <Link to={'user/' + user.id}>{ user.firstName }</Link>
+        </TableRowColumn>
+        <TableRowColumn>{ user.login }</TableRowColumn>
+        <TableRowColumn>{ user.email }</TableRowColumn>
       </TableRow>
     );
   }

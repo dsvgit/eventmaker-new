@@ -1,6 +1,4 @@
-import qajax from 'qajax';
-
-import { api, jsonOptions, serializeQuery } from 'app/js/utils/url.jsx';
+import { api } from 'app/js/utils/url.jsx';
 import { UPDATE_EVENTS, UPDATE_CURRENT_EVENT } from '../constants/index.jsx'
 
 function updateEvents(events) {
@@ -10,42 +8,55 @@ function updateEvents(events) {
 
 export function fetchEvents() {
   return dispatch => {
-    qajax({
+    $.ajax({
       url: api('api/events'),
       method: 'GET',
-      headers: jsonOptions('GET')
-    }).then(resp => {
-      console.log('action fetch events', JSON.parse(resp.responseText));
-      dispatch(updateEvents(JSON.parse(resp.responseText)));
+      success: function(resp) {
+        console.log('action fetch events', resp);
+        dispatch(updateEvents(resp));
+      }
     });
   }
 }
 
 export function addEvent(event) {
   return dispatch => {
-    qajax({
+    $.ajax({
       url: api('api/events'),
       method: 'POST',
-      data: event,
-      headers: jsonOptions('POST')
-    }).then(resp => {
-      console.log('action add event');
-      dispatch(fetchEvents());
+      data: JSON.stringify(event),
+      success: function(resp) {
+        console.log('action add event');
+        dispatch(fetchEvents());
+      }
     });
   }
 }
 
 export function searchEvents(text) {
-  var params = serializeQuery({ searchText: text });
   return dispatch => {
-    qajax({
-      url: api('api/events/search?' + params),
+    $.ajax({
+      url: api('api/events/search'),
       method: 'GET',
       data: { searchText: text },
-      headers: jsonOptions('GET')
-    }).then(resp => {
-      console.log('action fetch events', JSON.parse(resp.responseText));
-      dispatch(updateEvents(JSON.parse(resp.responseText)));
+      success: function(resp) {
+        console.log('action fetch events', resp);
+        dispatch(updateEvents(resp));
+      }
+    });
+  }
+}
+
+export function filterEventsByOwner(filter) {
+  return dispatch => {
+    $.ajax({
+      url: api('api/events/filter-owner'),
+      method: 'GET',
+      data: { filter: filter },
+      success: function(resp) {
+        console.log('action filter by owner events', resp);
+        dispatch(updateEvents(resp));
+      }
     });
   }
 }
@@ -55,16 +66,44 @@ function updateCurrentEvent(event) {
   return { type: UPDATE_CURRENT_EVENT, event }
 }
 
-export function fetchCurrentEvent(id) {
-  var params = serializeQuery({ id: id });
+export function fetchCurrentEvent(id, callback) {
   return dispatch => {
-    qajax({
+    $.ajax({
       url: api('api/events/' + id),
       method: 'GET',
-      headers: jsonOptions('GET')
-    }).then(resp => {
-      console.log('action fetch current event', JSON.parse(resp.responseText));
-      dispatch(updateCurrentEvent(JSON.parse(resp.responseText)));
+      success: function(resp) {
+        console.log('action fetch current event', resp);
+        if (callback) callback(resp);
+        dispatch(updateCurrentEvent(resp));
+      }
+    });
+  }
+}
+
+export function editCurrentEvent(event) {
+  return dispatch => {
+    $.ajax({
+      url: api('api/events/'),
+      method: 'PUT',
+      data: JSON.stringify(event),
+      success: function(resp) {
+        console.log('action edit current event');
+        dispatch(fetchCurrentEvent(event.id));
+      }
+    });
+  }
+}
+
+export function addRegistration(reg) {
+  return dispatch => {
+    $.ajax({
+      url: api('api/events/add-registration'),
+      method: 'PUT',
+      data: JSON.stringify(reg),
+      success: function(resp) {
+        console.log('action add registration');
+        dispatch(fetchCurrentEvent(reg.eventId));
+      }
     });
   }
 }

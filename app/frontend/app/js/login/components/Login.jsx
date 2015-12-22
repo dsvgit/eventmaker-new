@@ -6,8 +6,7 @@ import { Link } from 'react-router';
 import TextField from 'material-ui/lib/text-field';
 import FlatButton from 'material-ui/lib/flat-button';
 
-import qajax from 'qajax';
-import { api, jsonOptions, serializeQuery } from 'app/js/utils/url.jsx';
+import { api } from 'app/js/utils/url.jsx';
 
 import { login } from '../actions/index.jsx';
 
@@ -36,16 +35,23 @@ class Login extends React.Component {
   }
 
   handleLogin() {
-    console.log(this.props);
-    var params = serializeQuery(this.state);
-    qajax({
-      url: api('api/auth/login?' + params),
-      method: 'GET'
-    }).then(resp => {
-      console.log(resp.responseText);
-      sessionStorage.setItem('token', resp.responseText);
-      this.props.history.pushState(null, '/');
-    })
+    console.log('try login', this.props);
+
+    $.ajax({
+      url: api('api/auth/login'),
+      method: 'POST',
+      data: JSON.stringify(this.state),
+      success: function(resp) {
+        console.log('login success');
+        console.log(resp);
+        sessionStorage.setItem('token', resp.authToken);
+        var url = '/';
+        document.location.replace(url);
+      },
+      error: function(e) {
+        console.log('login error', e);
+      }
+    });
   }
 
   render() {
