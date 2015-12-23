@@ -1,0 +1,28 @@
+@startuml
+
+title Classes - eventmaker
+
+Event "1..1" o-- "0..*" Registration : in
+User "1..1" o- "0..*" Event : owner
+Registration "1" o-- "1" User : register
+
+class User {
+    -firstName
+    -login
+    -email
+}
+
+class Event {
+    -title
+    -eventDate
+    -description
+    -List<Registration>
+}
+
+class Registration {
+    -user
+    -status
+}
+
+
+@enduml
