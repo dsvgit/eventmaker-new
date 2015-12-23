@@ -107,3 +107,31 @@ export function addRegistration(reg) {
     });
   }
 }
+
+export function deleteRegistration(reg) {
+  return dispatch => {
+    $.ajax({
+      url: api('api/events/delete-registration'),
+      method: 'PUT',
+      data: JSON.stringify(reg),
+      success: function(resp) {
+        console.log('action add registration');
+        dispatch(fetchCurrentEvent(reg.eventId));
+      }
+    });
+  }
+}
+
+export function inviteUser(reg, callback) {
+  return dispatch => {
+    $.ajax({
+      url: api('api/events/invite-user'),
+      method: 'PUT',
+      data: JSON.stringify(reg),
+      success: function(resp) {
+        console.log('action add registration');
+        dispatch(fetchCurrentEvent(reg.eventId, callback));
+      }
+    });
+  }
+}

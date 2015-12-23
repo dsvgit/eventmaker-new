@@ -1,5 +1,7 @@
 package core.models;
 
+import core.models.enums.RegistrationStatus;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -12,6 +14,10 @@ public class Registration implements Serializable {
     @Column(name="id")
     private Integer id;
 
+    @Enumerated(EnumType.ORDINAL)
+    @Column(name="status")
+    private RegistrationStatus status;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
@@ -19,7 +25,8 @@ public class Registration implements Serializable {
     public Registration() {
     }
 
-    public Registration(User user) {
+    public Registration(User user, RegistrationStatus status) {
+        this.status = status;
         this.user = user;
     }
 
@@ -37,5 +44,13 @@ public class Registration implements Serializable {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public RegistrationStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(RegistrationStatus status) {
+        this.status = status;
     }
 }

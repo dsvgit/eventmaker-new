@@ -15,6 +15,7 @@ class OwnerFilter extends React.Component {
       <div className="events-owner-filter-main">
         <a href="#" onClick={this.handleClick.bind(this, 0)}>all </a>
         <a href="#" onClick={this.handleClick.bind(this, 1)}>my own </a>
+        <a href="#" onClick={this.handleClick.bind(this, 2)}>invites </a>
       </div>
     );
   }

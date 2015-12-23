@@ -146,12 +146,30 @@ public class EventsController {
 
     @PUT @Path("add-registration")
     @Consumes("application/json")
-    public void addregistration(VRegistrationAdd registration, @Context SecurityContext sc) {
+    public void addRegistration(VRegistrationAdd registration, @Context SecurityContext sc) {
         logger.log(Level.INFO, "[TRY ADD REGISTRATION] " + registration);
 
         Integer uid = Integer.valueOf(sc.getUserPrincipal().getName());
         registration.setUserId(uid);
 
         eventsService.addRegistration(registration);
+    }
+
+    @PUT @Path("delete-registration")
+    @Consumes("application/json")
+    public void deleteRegistration(VRegistrationAdd registration, @Context SecurityContext sc) {
+        logger.log(Level.INFO, "[TRY DELETE REGISTRATION] " + registration);
+
+        Integer uid = Integer.valueOf(sc.getUserPrincipal().getName());
+        registration.setUserId(uid);
+
+        eventsService.deleteRegistration(registration);
+    }
+
+    @PUT @Path("invite-user")
+    @Consumes("application/json")
+    public void inviteUser(VRegistrationAdd registration, @Context SecurityContext sc) {
+        logger.log(Level.INFO, "[TRY ADD REGISTRATION] " + registration);
+        eventsService.inviteUser(registration);
     }
 }

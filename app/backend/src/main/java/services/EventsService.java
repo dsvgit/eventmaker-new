@@ -6,6 +6,7 @@ import api.models.events.enums.OwnerFilterType;
 import core.models.Event;
 import core.models.Registration;
 import core.models.User;
+import core.models.enums.RegistrationStatus;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,8 +18,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Root;
-import java.security.acl.Owner;
+import java.util.ArrayList;
 import java.util.List;
 
 @Stateless
@@ -85,7 +87,20 @@ public class EventsService implements EventsServiceRemote {
         logger.log(Level.INFO, "[EVENTS SERVICE] get filtered after query");
 
         List<Event> eventsList = em.createQuery(q).getResultList();
-        return eventsList;
+        List<Event> newEventsList = new ArrayList<>();
+        if (filter == OwnerFilterType.INVITES) {
+            for (Event event : eventsList) {
+                for (Registration reg : event.getRegistrations()) {
+                    if (reg.getUser().getId().equals(uid)) {
+                        newEventsList.add(event);
+                    }
+                }
+            }
+        } else {
+            newEventsList = eventsList;
+        }
+
+        return newEventsList;
     }
 
     @Override
@@ -116,7 +131,49 @@ public class EventsService implements EventsServiceRemote {
         Event event = getEvent(registration.getEventId());
         User user = usersService.getUser(registration.getUserId());
 
-        Registration reg = new Registration(user);
+        boolean flag = true;
+        for (Registration reg : event.getRegistrations()) {
+            if (reg.getUser().getId().equals(user.getId())) {
+                reg.setStatus(RegistrationStatus.CONFIRMED);
+                flag = false;
+            }
+        }
+
+        if (flag) {
+            Registration reg = new Registration(user, RegistrationStatus.CONFIRMED);
+            em.persist(reg);
+            event.addRegistration(reg);
+        }
+
+        em.merge(event);
+    }
+
+    @Override
+    public void deleteRegistration(VRegistrationAdd registration) {
+        Event event = getEvent(registration.getEventId());
+        User user = usersService.getUser(registration.getUserId());
+
+        ArrayList<Registration> rlist = new ArrayList<>();
+        for(Registration reg : event.getRegistrations()) {
+            if(!reg.getUser().getId().equals(user.getId())) {
+                rlist.add(reg);
+            }
+        }
+        event.setRegistrations(rlist);
+
+        em.merge(event);
+    }
+
+    @Override
+    public void inviteUser(VRegistrationAdd registration) {
+        Event event = getEvent(registration.getEventId());
+        User user = usersService.getUser(registration.getUserId());
+
+        for (Registration reg : event.getRegistrations()) {
+            if (reg.getUser().getId().equals(user.getId())) return;
+        }
+
+        Registration reg = new Registration(user, RegistrationStatus.INVITED);
         em.persist(reg);
         event.addRegistration(reg);
 

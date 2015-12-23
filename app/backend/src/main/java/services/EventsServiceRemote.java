@@ -26,4 +26,8 @@ public interface EventsServiceRemote {
     Event getEvent(Integer id);
 
     void addRegistration(VRegistrationAdd registration);
+
+    void deleteRegistration(VRegistrationAdd registration);
+
+    void inviteUser(VRegistrationAdd registration);
 }

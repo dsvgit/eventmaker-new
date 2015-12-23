@@ -24,7 +24,7 @@ import { Link } from 'react-router';
 
 import MoreVertIcon from 'react-material-icons/icons/navigation/more-vert';
 
-import { fetchCurrentEvent, addRegistration } from '../actions/index.jsx';
+import { fetchCurrentEvent, addRegistration, deleteRegistration } from '../actions/index.jsx';
 
 class EventCard extends React.Component {
 
@@ -41,10 +41,6 @@ class EventCard extends React.Component {
     this.props.history.pushState(null, '/event/edit/' + this.props.params.eventID);
   }
 
-  handleGoToProfile(userId) {
-    this.props.history.pushState(null, '/user/' + userId);
-  }
-
   handleGo() {
     console.log('event card try add reg', {
       eventId: this.props.params.eventID
@@ -55,21 +51,37 @@ class EventCard extends React.Component {
     }));
   }
 
+  handleDontGo() {
+    console.log('event card try add reg', {
+      eventId: this.props.params.eventID
+    });
+
+    this.props.dispatch(deleteRegistration({
+      eventId: this.props.params.eventID
+    }));
+  }
+
+  handleGoToProfile(userId) {
+    this.props.history.pushState(null, '/user/' + userId);
+  }
+
   render() {
     console.log('event card render ', this.props);
     var event = Object.assign({}, this.props.event);
     console.log('render event card, is editable: ', event.editable);
     console.log('render event card, regs', event.regs);
 
-    var hadleGoToProfile = this.handleGoToProfile.bind(this);
+    var self = this;
 
     var regs = event.regs.slice().map(function(reg) {
-      console.log(hadleGoToProfile);
-      return <ListItem
-        key={reg.user.id}
-        primaryText={reg.user.firstName}
-        rightIcon={<MenuItems userId={reg.user.id}
-        onGoToProfile={hadleGoToProfile} />}/>;
+      if (reg.status == 'CONFIRMED') {
+        return <ListItem
+          key={reg.user.id}
+          primaryText={reg.user.firstName}
+          rightIcon={<MoreVertIcon />}
+          onClick={self.handleGoToProfile.bind(self, reg.user.id)}
+          />;
+      }
     });
 
     return (
@@ -86,8 +98,8 @@ class EventCard extends React.Component {
               </div>
             </CardMedia>
             <CardActions>
-              <FlatButton label="I go!" onClick={this.handleGo.bind(this)}/>
-              <FlatButton label="May be go"/>
+              <FlatButton label="I'll be there" onClick={this.handleGo.bind(this)}/>
+              <FlatButton label="No, thanks" onClick={this.handleDontGo.bind(this)}/>
               <FlatButton
                 label="Edit"
                 onClick={this.handleEdit.bind(this)}
@@ -107,20 +119,6 @@ class EventCard extends React.Component {
         </div>
       </div>
     );
-  }
-}
-
-class MenuItems extends React.Component {
-
-  handleGoToProfile() {
-    this.props.onGoToProfile(this.props.userId);
-  }
-
-  render(){
-    return <IconMenu iconButtonElement={<MoreVertIcon />}>
-      <MenuItem primaryText="Profile" onClick={this.handleGoToProfile.bind(this)} />
-      <MenuItem primaryText="Send message" />
-    </IconMenu>
   }
 }
 
